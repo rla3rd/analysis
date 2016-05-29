@@ -745,3 +745,26 @@ def vol( inList, period, nonzero=False ):
         append( np.std( np.exp( np.log( today / yesterday ) ) ) * np.sqrt( 252 ) )
         startIdx +=1
     return volList
+
+def validateCusip(cusip):
+    if len(cusip) != 9:
+        return False
+    else:
+        total= 0
+        cusip = cusip.upper()
+        alphabet="ABCDEFGHIJKLMNOPQRSTUVWXYZ*@#"
+        for i in range(len(cusip)-1):
+            if not cusip[i].isdigit():
+                val =  alphabet.index(cusip[i])+1
+            else:
+                val = int(cusip[i])
+            if i % 2 != 0 :
+                val *= 2
+
+            val = (val % 10) + (val / 10);
+            total += val;
+        check = (10 - (total % 10)) % 10
+        if check == int(cusip[-1]):
+            return True
+        else:
+            return False
